@@ -14,13 +14,19 @@ DATE_FMT = "%d/%m/%Y"
 def get_json(url):
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(url, timeout=60) as r:
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (compatible; KrishiMitraBot/1.0)",
+                    "Accept": "application/json",
+                },
+            )
+            with urllib.request.urlopen(req, timeout=40) as r:
                 return json.loads(r.read().decode("utf-8"))
         except Exception as e:
-            print("retry", attempt + 1, type(e).__name__)
+            print("retry", attempt + 1, repr(e))
             time.sleep(5)
     return None
-
 
 def num(v):
     try:
